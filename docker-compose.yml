@@ -31,7 +31,6 @@ services:
     depends_on:
        - "vtuber-analytics-es01"
   vtuber-analytics-recorder:
-    image: twitch-recorder
     build:
       context: .
     environment:
