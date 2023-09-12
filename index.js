@@ -57,12 +57,10 @@ setInterval(async () => {
 }, 30 * 1000)
 
 Twitch.on('chat', (channel, userstate, message, self) => {
-    console.log({ channel: channel, userstate: userstate, message: message, liveStatus: liveStatus })
     queue.push(...generateBody(userstate, channel, new Date(), message))
 });
 
 Twitch.on('cheer', (channel, userstate, message) => {
-    console.log({ channel: channel, userstate: userstate, message: message, liveStatus: liveStatus })
     queue.push(...generateBody(userstate, channel, new Date(), message))
 });
 
@@ -82,7 +80,7 @@ function generateBody(sender, chid, timestamp, msg) {
             username: sender['username'],
             userid: sender['user-id'],
             subscriber: sender['subscriber'],
-            bits: sender['message-type'] == 'cheer' ? sender['bits'] : 0,
+            bits: 'bits' in sender ? sender['bits'] : 0,
             message: msg,
             timestamp: timestamp
         },
