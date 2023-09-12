@@ -1,0 +1,16 @@
+{
+  "name": "vtuber-live-analytics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "advancedbear",
+  "license": "MIT",
+  "dependencies": {
+    "@elastic/elasticsearch": "^8.9.0",
+    "axios": "^1.5.0",
+    "tmi.js": "^1.8.5"
+  }
+}

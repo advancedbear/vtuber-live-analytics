@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+  vtuber-analytics-es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
+    hostname: vtuber-analytics-es01
+    ports:
+      - 9200:9200
+    volumes:
+      - vtuber-analytics-data01:/usr/share/elasticsearch/data
+    environment:
+      cluster.name: vtuber-analyzer
+      xpack.security.enabled: false
+      discovery.type: single-node
+      ES_JAVA_OPTS: -Xms4g -Xmx6g
+    restart: unless-stopped
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+  vtuber-analytics-kibana:
+    image: docker.elastic.co/kibana/kibana:8.7.1
+    environment:
+      ELASTICSEARCH_HOSTS: http://vtuber-analytics-es01:9200
+    ports:
+       - 5601:5601
+    restart: unless-stopped
+    depends_on:
+       - "vtuber-analytics-es01"
+  vtuber-analytics-recorder:
+    image: twitch-recorder
+    environment:
+      ELASTICSEARCH_HOSTS: http://vtuber-analytics-es01:9200
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: "./index.js"
+        target: "/app/index.js"
+      - type: bind
+        source: "./ecosystem.config.js"
+        target: "/app/ecosystem.config.js"
+    depends_on:
+      - "vtuber-analytics-kibana"
+volumes:
+  vtuber-analytics-data01:
+    driver: local
