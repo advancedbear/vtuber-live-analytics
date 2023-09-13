@@ -2,7 +2,11 @@ const tmi = require('tmi.js');
 const { Client } = require('@elastic/elasticsearch')
 const axios = require('axios').default
 const client = new Client({
-    node: process.env.ELASTICSEARCH_HOSTS || "http://localhost:9200"
+    node: process.env.ELASTICSEARCH_HOSTS || "http://localhost:9200",
+    auth: {
+        username: process.env.ELASTICSEARCH_USERNAME,
+        password: process.env.ELASTICSEARCH_PASSWORD
+    }
 })
 const Twitch = new tmi.Client({
     channels: [process.argv[2]]
